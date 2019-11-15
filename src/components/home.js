@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { SvgXml } from 'react-native-svg';
-import { LinearGradient } from 'react-native-linear-gradient';
 
 import Logo from '../assets/images/logo.svg';
 import Water from '../assets/images/water.svg';
-import Warning from '../assets/images/warning.svg';
+import Warning from '../assets/images/alert.svg';
+import Danger from '../assets/images/danger.svg';
 
 const sizeIcon = Dimensions.get('screen').width * 0.3;
 const sizeIcons = Dimensions.get('screen').width * 0.14;
@@ -40,10 +40,10 @@ export default class Home extends React.Component {
                         <Text style={ styles.title }> Estado </Text>
                     </View>
 
-                    <View style={[ styles.body, styles.warning ]}>
+                    <View style={[ styles.body, styles.danger ]}>
                         <View style={[ styles.row, styles.bodyRow ]}>
-                            <SvgXml width={ sizeIcons } height={ sizeIcons } xml={ Warning } />
-                            <Text style={ styles.volume }> Moderado </Text>
+                            <SvgXml width={ sizeIcons } height={ sizeIcons } xml={ Danger } />
+                            <Text style={[ styles.volume, styles.dangerText ]}> Perigo </Text>
                         </View>
                     </View>
                 </View>
@@ -88,7 +88,8 @@ const styles = StyleSheet.create({
     volume: {
         color: '#f1f2f6',
         fontWeight: 'bold',
-        fontSize: sizeVolume
+        fontSize: sizeVolume,
+        marginHorizontal: 5
     },
     bodyRow: {
         flexDirection: 'row',
@@ -105,6 +106,15 @@ const styles = StyleSheet.create({
         color: '#f1f2f6'
     },
     warning: {
-        backgroundColor: '#e1b12c'
+        backgroundColor: '#ffda79'
+    },
+    warningText: {
+        color: '#ccae62'
+    },
+    danger: {
+        backgroundColor: '#ff5252'
+    },
+    dangerText: {
+        color: '#f1f2f6'
     }
 });
