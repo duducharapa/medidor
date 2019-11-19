@@ -2,6 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 import { SvgXml } from 'react-native-svg';
 
+import api from '../services/api';
+
 import Logo from '../assets/images/logo.svg';
 import Water from '../assets/images/water.svg';
 import Warning from '../assets/images/alert.svg';
@@ -14,7 +16,22 @@ const sizeVolume = Dimensions.get('screen').width * 0.055;
 
 export default class Home extends React.Component {
 
+    state = {
+        volume: this.props.navigation.getParam('volume')
+    }
+
+    updateVolume = async () => {
+        try{
+            let volume = await api.get('/');
+            this.setState({ volume: volume.data.volume });
+        } catch(ex) {
+            alert('Erro ao atualizar');
+        }
+    }
+
     render(){
+        const { volume } = this.state;
+
         return(
             <View style={ styles.container }>
             
@@ -30,7 +47,9 @@ export default class Home extends React.Component {
                     <View style={ styles.body }>
                         <View style={[ styles.row, styles.bodyRow ]}>
                             <SvgXml width={ sizeIcons } height={ sizeIcons } xml={ Water } />
-                            <Text style={ styles.volume }> 25m³ </Text>
+                            <Text style={ styles.volume }>
+                                { `${ volume } cm³` }
+                            </Text>
                         </View>
                     </View>
                 </View>
@@ -49,7 +68,9 @@ export default class Home extends React.Component {
                 </View>
 
                 <View style={ styles.row }>
-                    <TouchableOpacity style={ styles.button }>
+                    <TouchableOpacity 
+                        style={ styles.button } onPress={ this.updateVolume }
+                    >
                         <Text style={ styles.textButton } > Atualizar informações </Text>
                     </TouchableOpacity>
                 </View>

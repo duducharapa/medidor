@@ -5,53 +5,34 @@ import LinearGradient from 'react-native-linear-gradient';
 
 import Logo from './assets/images/logo.svg';
 
+import api from './services/api';
+
 const sizeIcon = Dimensions.get('screen').width * 0.5;
 const fontSize = Dimensions.get('screen').width * 0.055;
 
 export default class App extends React.Component {
 
-  state = {
-    dots: '',
-    loading: true,
-    counter: 0
-  }
-
   async componentDidMount(){
-    const { loading, dots } = this.state;
+    let volume = 0;
 
-    await this.sleep(500);
-    
-    if(loading)
-      this.setState({ dots: dots === '...' ? '' : `${ dots }.` });
-  }
-
-  async componentDidUpdate(){
-    const { dots, counter, loading } = this.state;
-
-    await this.sleep(500);
-
-    if(loading){
-      this.setState({ 
-        dots: dots === '...' ? '' : `${ dots }.`,
-        loading: counter !== 6,
-        counter: counter + 1   
-      });
-    }else{
-      this.props.navigation.navigate('Home');
+    try{
+      volume = await api.get('/');
+    } catch(ex) {
+      alert('Erro ao obter os dados');
+    } finally {
+      this.sleep(1500);
+      if(volume !== 0) this.props.navigation.navigate('Home',{ volume: volume.data.volume });
     }
-
   }
-
+  
   sleep = time => new Promise(res => setTimeout(res, time));
 
   render(){
-    const { dots } = this.state;
-
     return(
         <LinearGradient colors={['#70a1ff','#5352ed']} style={ styles.container }>
             <SvgXml width={ sizeIcon } height={ sizeIcon } xml={ Logo } />
             <Text style={ styles.text }>
-                { `Realizando a leitura dos dados${ dots }` }
+                Realizando a leitura dos dados
             </Text>
         </LinearGradient>
     );
